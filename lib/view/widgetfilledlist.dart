@@ -21,15 +21,25 @@ class Widgetfilledlist extends StatelessWidget {
           title: Text(students!.first.name!),
           subtitle: Text(students!.first.age!.toString()),
         ),
-        itemBuilder: (context, index) => Card(
-          child: Column(
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.face),
-                title: Text(students![index].name!),
-                subtitle: Text("Edad: ${students![index].age!}"),
-              ),
-            ],
+        itemBuilder: (context, index) => Expanded(
+          child: Card(
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.face),
+                  title: Text(students![index].name!),
+                  subtitle: Text("Edad: ${students![index].age!}"),
+                ),
+                Wrap(
+                  spacing: 10,
+                  children: <Widget>[
+                    IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+                    SizedBox(width: 10),
+                    IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
