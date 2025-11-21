@@ -6,9 +6,13 @@ import '../bloc/studentbloc.dart';
 import '../model/studentmodel.dart';
 
 class Widgetform {
-  static void show(BuildContext context) async {
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController ageController = TextEditingController();
+  static void show(BuildContext context, [Student? student]) async {
+    final TextEditingController nameController = TextEditingController(
+      text: student?.name,
+    );
+    final TextEditingController ageController = TextEditingController(
+      text: student?.age.toString(),
+    );
     final bloc = context.read<StudentBloc>();
 
     await showDialog<void>(
@@ -16,7 +20,9 @@ class Widgetform {
       barrierDismissible: true,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: Text('Agregar Estudiante'),
+          title: student == null
+              ? Text('Agregar Estudiante')
+              : Text('Modificar Estudiante'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -57,14 +63,26 @@ class Widgetform {
               onPressed: () {
                 if (nameController.text.isNotEmpty ||
                     ageController.text.isNotEmpty) {
-                  bloc.add(
-                    CreateStudent(
-                      Student(
-                        name: nameController.text,
-                        age: int.tryParse(ageController.text) ?? 0,
+                  if (student == null) {
+                    bloc.add(
+                      CreateStudent(
+                        Student(
+                          name: nameController.text,
+                          age: int.tryParse(ageController.text) ?? 0,
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  } else {
+                    bloc.add(
+                      UpdateStudent(
+                        student.copyWith(
+                          id: student.id,
+                          name: nameController.text,
+                          age: int.tryParse(ageController.text) ?? 0,
+                        ),
+                      ),
+                    );
+                  }
                   Navigator.of(dialogContext).pop(); // dismiss el dialog
                 } else {
                   Navigator.of(dialogContext).pop(); // dismiss el dialog
@@ -73,7 +91,7 @@ class Widgetform {
                   );
                 }
               },
-              child: Text("Agregar"),
+              child: student == null ? Text("Agregar") : Text("Modificar"),
             ),
           ],
         );
