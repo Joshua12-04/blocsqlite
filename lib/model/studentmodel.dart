@@ -10,7 +10,7 @@ class Student extends Equatable {
   // TODO: implement props
   List<Object?> get props => [id, age, name];
 
-  // Convierte ek objeto en un map
+  // Convierte el objeto en un map
   Map<String, dynamic> toMap() {
     return {'id': id, 'age': age, 'name': name};
   }
